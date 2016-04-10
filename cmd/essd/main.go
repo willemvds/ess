@@ -12,15 +12,15 @@ type AddItemToCart struct {
 }
 
 func main() {
-	ev1 := cart.ItemAddedToCart{"CartX2", cart.Item{"Peanuts"}}
-	ev2 := cart.ItemAddedToCart{"CartX2", cart.Item{"Winamp"}}
+	ev1 := cart.ItemAddedToCart{42, cart.Item{"Peanuts"}}
+	ev2 := cart.ItemAddedToCart{42, cart.Item{"Winamp"}}
 
 	eventStore := &cart.EventStore{}
 	eventStore.Add(ev1)
 	eventStore.Add(ev2)
 
 	cmd := cart.AddItemToCart{
-		CartId: "CartX2",
+		CartId: 42,
 		ItemId: "Jingle Bells",
 	}
 
@@ -28,7 +28,7 @@ func main() {
 	fmt.Println("HandleAddItemToCart (cmd1) err=", err, ", events=", events)
 
 	cmd2 := cart.AddItemToCart{
-		CartId: "CartX3",
+		CartId: 777,
 		ItemId: "Noobs",
 	}
 

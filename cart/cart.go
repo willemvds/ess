@@ -9,7 +9,7 @@ type Item struct {
 }
 
 type CartAggregate struct {
-	Id    string
+	Id    int
 	Items []Item
 }
 

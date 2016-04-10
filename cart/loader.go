@@ -8,10 +8,10 @@ import (
 var ErrCartNotFound = errors.New("Cart not found")
 
 type CartLoader struct {
-	Carts map[string]CartAggregate
+	Carts map[int]CartAggregate
 }
 
-func (cl CartLoader) Get(es *EventStore, id string) (*CartAggregate, error) {
+func (cl CartLoader) Get(es *EventStore, id int) (*CartAggregate, error) {
 	fmt.Println("Trying to load Cart Aggregate", id)
 	defer func() {
 		fmt.Println("Done trying to load Cart Aggregate", id)

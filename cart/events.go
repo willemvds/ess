@@ -1,6 +1,6 @@
 package cart
 
 type ItemAddedToCart struct {
-	CartId string
+	CartId int
 	Item   Item
 }
