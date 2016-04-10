@@ -12,8 +12,8 @@ type AddItemToCart struct {
 }
 
 func main() {
-	ev1 := cart.ItemAddedToCart{"CartX2", "Peanuts"}
-	ev2 := cart.ItemAddedToCart{"CartX2", "Winamp"}
+	ev1 := cart.ItemAddedToCart{"CartX2", cart.Item{"Peanuts"}}
+	ev2 := cart.ItemAddedToCart{"CartX2", cart.Item{"Winamp"}}
 
 	eventStore := &cart.EventStore{}
 	eventStore.Add(ev1)

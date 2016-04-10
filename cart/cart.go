@@ -9,7 +9,7 @@ type Item struct {
 }
 
 type CartAggregate struct {
-	Id string
+	Id    string
 	Items []Item
 }
 
@@ -18,6 +18,11 @@ func (ca CartAggregate) String() string {
 }
 
 func (ca *CartAggregate) AddToCart(i Item) error {
-	ca.Items = append(ca.Items, i)
+	ca.ApplyItemAddedToCart(ItemAddedToCart{ca.Id, i})
 	return nil
+}
+
+func (ca *CartAggregate) ApplyItemAddedToCart(ev ItemAddedToCart) {
+	fmt.Println("Applying ItemAddedToCart event", ev, len(ca.Items))
+	ca.Items = append(ca.Items, ev.Item)
 }
