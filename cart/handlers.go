@@ -15,7 +15,7 @@ func HandleAddItemToCart(es *EventStore, cmd AddItemToCart) ([]interface{}, erro
 	}
 
 	item := Item{Id: "Cheats"}
-	ca.AddToCart(item)
+	ca.AddItem(item)
 
 	return nil, nil
 }

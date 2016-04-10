@@ -24,7 +24,7 @@ func (cl CartLoader) Get(es *EventStore, id int) (*CartAggregate, error) {
 	for _, ev := range es.Events {
 		switch ev.(type) {
 		case ItemAddedToCart:
-			cp.ApplyItemAddedToCart(ev.(ItemAddedToCart))
+			cp.ApplyItemAdded(ev.(ItemAddedToCart))
 		}
 	}
 	return cp, nil

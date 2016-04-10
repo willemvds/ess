@@ -17,12 +17,12 @@ func (ca CartAggregate) String() string {
 	return fmt.Sprintf("I am Cart Aggregate %s with %d items", ca.Id, len(ca.Items))
 }
 
-func (ca *CartAggregate) AddToCart(i Item) error {
-	ca.ApplyItemAddedToCart(ItemAddedToCart{ca.Id, i})
+func (ca *CartAggregate) AddItem(i Item) error {
+	ca.ApplyItemAdded(ItemAddedToCart{ca.Id, i})
 	return nil
 }
 
-func (ca *CartAggregate) ApplyItemAddedToCart(ev ItemAddedToCart) {
+func (ca *CartAggregate) ApplyItemAdded(ev ItemAddedToCart) {
 	fmt.Println("Applying ItemAddedToCart event", ev, len(ca.Items))
 	ca.Items = append(ca.Items, ev.Item)
 }
