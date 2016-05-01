@@ -8,22 +8,46 @@ var (
 	ErrNoHandler = errors.New("[cart] No handler found for that command")
 )
 
-func Handle(cmd command, es *EventStore) ([]event, error) {
+func Handle(cmd command, es EventStore) ([]event, error) {
 	switch cmd.(type) {
 	case CreateCommand:
 		createCommand := cmd.(CreateCommand)
-		cart, err := buildFromEvents(createCommand.CartId, es.EventsFor(createCommand.CartId))
+		version, history, err := es.EventsFor(createCommand.CartId)
 		if err != nil {
-			return nil, err
+			return []event{}, err
 		}
-		return handleCreateCommand(cart, createCommand)
+		cart, err := buildFromEvents(createCommand.CartId, history)
+		if err != nil {
+			return []event{}, err
+		}
+		events, err := handleCreateCommand(cart, createCommand)
+		if err != nil {
+			return []event{}, err
+		}
+		err = es.AppendFor(createCommand.CartId, version, events)
+		if err != nil {
+			return []event{}, err
+		}
+		return events, nil
 	case AddItemCommand:
 		addItemCommand := cmd.(AddItemCommand)
-		cart, err := buildFromEvents(addItemCommand.CartId, es.EventsFor(addItemCommand.CartId))
+		version, history, err := es.EventsFor(addItemCommand.CartId)
 		if err != nil {
-			return nil, err
+			return []event{}, err
 		}
-		return handleAddItemCommand(cart, addItemCommand)
+		cart, err := buildFromEvents(addItemCommand.CartId, history)
+		if err != nil {
+			return []event{}, err
+		}
+		events, err := handleAddItemCommand(cart, addItemCommand)
+		if err != nil {
+			return []event{}, err
+		}
+		err = es.AppendFor(addItemCommand.CartId, version, events)
+		if err != nil {
+			return []event{}, err
+		}
+		return events, nil
 	default:
 		return nil, ErrNoHandler
 	}

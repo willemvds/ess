@@ -7,28 +7,30 @@ import (
 )
 
 func main() {
-	eventStore := cart.EventStore{}
+	eventStore := &cart.ArrayEventStore{}
 
-	createCmd := cart.CreateCommand{"someid"}
-	events, err := cart.Handle(createCmd, &eventStore)
+	cartId := "someid"
+
+	createCmd := cart.CreateCommand{cartId}
+	events, err := cart.Handle(createCmd, eventStore)
 	if err != nil {
 		fmt.Println(err)
 	}
-	eventStore.Add(events)
+	fmt.Println(events)
 
-	addItemCmd := cart.AddItemCommand{"someid", "something", 13}
-	events, err = cart.Handle(addItemCmd, &eventStore)
+	addItemCmd := cart.AddItemCommand{cartId, "something", 13}
+	events, err = cart.Handle(addItemCmd, eventStore)
 	if err != nil {
 		fmt.Println(err)
 	}
-	eventStore.Add(events)
+	fmt.Println(events)
 
-	addItemCmd = cart.AddItemCommand{"someid", "something-else", -50}
-	events, err = cart.Handle(addItemCmd, &eventStore)
+	addItemCmd = cart.AddItemCommand{cartId, "something-else", -50}
+	events, err = cart.Handle(addItemCmd, eventStore)
 	if err != nil {
 		fmt.Println(err)
 	}
-	eventStore.Add(events)
+	fmt.Println(events)
 
 	fmt.Println(eventStore)
 }

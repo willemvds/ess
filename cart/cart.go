@@ -27,7 +27,7 @@ func (cart cart) String() string {
 }
 
 func buildFromEvents(cartId string, events []event) (*cart, error) {
-	c := &cart{}
+	c := &cart{id: cartId}
 	for _, event := range events {
 		err := c.Apply(event)
 		if err != nil {
@@ -52,12 +52,11 @@ func (cart *cart) Apply(ev event) error {
 func (cart *cart) create(id string) ([]event, error) {
 	created := time.Now()
 	ev := createdEvent{id, created}
-	cart.applyCreated(ev)
+	// cart.applyCreated(ev)
 	return []event{ev}, nil
 }
 
 func (cart *cart) applyCreated(ev createdEvent) {
-	cart.id = ev.CartId
 	cart.created = ev.Created
 }
 
@@ -69,7 +68,7 @@ func (cart *cart) addItem(itemId string, qty int) ([]event, error) {
 	// is this where we read from another aggregate like product to see if item exists?
 
 	ev := itemAddedEvent{cart.id, itemId, qty}
-	cart.applyItemAdded(ev)
+	// cart.applyItemAdded(ev)
 	return []event{ev}, nil
 }
 
