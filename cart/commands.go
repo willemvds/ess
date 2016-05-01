@@ -1,6 +1,13 @@
 package cart
 
-type AddItemToCart struct {
-	CartId int
+type command interface{}
+
+type CreateCommand struct {
+	CartId string
+}
+
+type AddItemCommand struct {
+	CartId string
 	ItemId string
+	Qty    int
 }
