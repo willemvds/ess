@@ -28,28 +28,30 @@ func (cart cart) String() string {
 
 func buildFromEvents(cartId string, events []event) (*cart, error) {
 	c := &cart{id: cartId}
-	for _, event := range events {
-		err := c.Apply(event)
-		if err != nil {
-			return &cart{}, err
-		}
+	if err := c.Apply(events); err != nil {
+		return &cart{}, err
 	}
 	return c, nil
 }
 
-func (cart *cart) Apply(ev event) error {
-	switch ev.(type) {
-	case createdEvent:
-		cart.applyCreated(ev.(createdEvent))
-		return nil
-	case itemAddedEvent:
-		cart.applyItemAdded(ev.(itemAddedEvent))
-		return nil
+func (cart *cart) Apply(events []event) error {
+	for _, ev := range events {
+		switch ev.(type) {
+		case createdEvent:
+			cart.applyCreated(ev.(createdEvent))
+		case itemAddedEvent:
+			cart.applyItemAdded(ev.(itemAddedEvent))
+		default:
+			return ErrEventApplierNotFound
+		}
 	}
-	return ErrEventApplierNotFound
+	return nil
 }
 
 func (cart *cart) create(id string) ([]event, error) {
+	if !cart.created.IsZero() {
+		return []event{}, fmt.Errorf("Cart with that ID already exists")
+	}
 	created := time.Now()
 	ev := createdEvent{id, created}
 	// cart.applyCreated(ev)

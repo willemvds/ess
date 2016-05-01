@@ -16,7 +16,7 @@ func TestShouldFailIfNoApplierFound(t *testing.T) {
 
 	_, err := buildFromEvents("BOGUS", []event{bs})
 	if err == nil {
-		t.Error("Expected missing applier error was not return")
+		t.Error("Expected missing applier error was not returned")
 	}
 }
 
@@ -35,7 +35,10 @@ func TestBuildFromEvents(t *testing.T) {
 
 	events := []event{createdEv, itemAddedEv}
 
-	c, _ := buildFromEvents(cartId, events)
+	c, err := buildFromEvents(cartId, events)
+	if err != nil {
+		t.Errorf("Building from events failed. This is bad.")
+	}
 	length := len(c.items)
 	expectedLength := 1
 	if length != expectedLength {
